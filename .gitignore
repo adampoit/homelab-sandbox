@@ -1,0 +1,6 @@
+.vagrant/
+kubespray/
+rook/
+
+cluster/artifacts/
+cluster/credentials/
