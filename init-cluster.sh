@@ -11,13 +11,8 @@ popd
 
 export KUBECONFIG=$PWD/cluster/artifacts/admin.conf
 
-if [ ! -d rook ]
-then
-	git clone https://github.com/rook/rook.git
-fi
-
-kubectl create -f rook/cluster/examples/kubernetes/ceph/common.yaml
-kubectl create -f rook/cluster/examples/kubernetes/ceph/operator.yaml
+kubectl create -f https://github.com/rook/rook/raw/release-1.0/cluster/examples/kubernetes/ceph/common.yaml
+kubectl create -f https://github.com/rook/rook/raw/release-1.0/cluster/examples/kubernetes/ceph/operator.yaml
 
 while [ $(kubectl -n rook-ceph get pod | grep ContainerCreating | wc -l) -ne 0 ]; do
 	sleep 5
@@ -25,6 +20,7 @@ done
 
 kubectl create -f cluster/rook.yaml
 kubectl create -f cluster/rook-storageclass.yaml
+kubectl create -f cluster/rook-filesystem.yaml
 
 kubectl patch storageclass rook-ceph-block -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 

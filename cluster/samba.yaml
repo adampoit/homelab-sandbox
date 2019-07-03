@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: samba
+  namespace: plex
+spec:
+  type: LoadBalancer
+  selector:
+    app: samba
+  ports:
+  - port: 139
+    name: tcp-139
+  - port: 445
+    name: tcp-445
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samba-deployment
+  namespace: plex
+spec:
+  selector:
+    matchLabels:
+      app: samba
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: samba
+    spec:
+      containers:
+      - name: samba
+        image: dperson/samba
+        ports:
+        - containerPort: 139
+        - containerPort: 445
+        volumeMounts:
+          - name: plex-data
+            mountPath: /data
+        args: ["-s", "data;/data;yes;no;yes", "-p"]
+      volumes:
+      - name: plex-data
+        flexVolume:
+          driver: ceph.rook.io/rook
+          fsType: ceph
+          options:
+            fsName: plex-data
+            clusterNamespace: rook-ceph

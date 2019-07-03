@@ -1,7 +1,7 @@
 apiVersion: ceph.rook.io/v1
 kind: CephFilesystem
 metadata:
-  name: plex-fs
+  name: plex-data
   namespace: rook-ceph
 spec:
   metadataPool:

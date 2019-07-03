@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex
+  namespace: plex
+spec:
+  type: LoadBalancer
+  selector:
+    app: plex
+  ports:
+  - port: 80
+    name: http
+    targetPort: pms
+  - port: 443
+    name: https
+    targetPort: https
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex-deployment
+  namespace: plex
+spec:
+  selector:
+    matchLabels:
+      app: plex
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      containers:
+      - name: plex
+        image: plexinc/pms-docker
+        ports:
+          - name: pms
+            containerPort: 32400
+          - name: http
+            containerPort: 32400
+          - name: https
+            containerPort: 32443
+          - containerPort: 3005
+          - containerPort: 8324
+          - containerPort: 32469
+          - containerPort: 1900
+          - containerPort: 32410
+          - containerPort: 32412
+          - containerPort: 32413
+          - containerPort: 32414
+        volumeMounts:
+        - name: plex-data
+          mountPath: /data
+        env:
+          - name: PLEX_CLAIM
+            value: <%= claim %>
+      volumes:
+      - name: plex-data
+        flexVolume:
+          driver: ceph.rook.io/rook
+          fsType: ceph
+          options:
+            fsName: plex-data
+            clusterNamespace: rook-ceph
