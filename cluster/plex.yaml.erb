@@ -24,7 +24,7 @@ spec:
   selector:
     matchLabels:
       app: plex
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -51,6 +51,10 @@ spec:
         volumeMounts:
         - name: plex-data
           mountPath: /data
+        - name: plex-config
+          mountPath: /config
+        - name: plex-transcode
+          mountPath: /transcode
         env:
           - name: PLEX_CLAIM
             value: <%= claim %>
@@ -62,3 +66,9 @@ spec:
           options:
             fsName: plex-data
             clusterNamespace: rook-ceph
+      - name: plex-config
+        persistentVolumeClaim:
+          claimName: plex-config
+      - name: plex-transcode
+        persistentVolumeClaim:
+          claimName: plex-transcode

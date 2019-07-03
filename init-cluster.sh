@@ -27,5 +27,7 @@ kubectl patch storageclass rook-ceph-block -p '{"metadata": {"annotations":{"sto
 kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.7.3/manifests/metallb.yaml
 kubectl create -f cluster/metallb.yaml
 
-kubectl create -f cluster/nginx-deployment.yaml
-kubectl create -f cluster/nginx-service.yaml
+kubectl create -f cluster/nginx.yaml
+
+kubectl create -f cluster/plex-namespace.yaml
+kubectl create -f cluster/samba.yaml
