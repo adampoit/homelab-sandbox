@@ -18,9 +18,9 @@ while [ $(kubectl -n rook-ceph get pod | grep ContainerCreating | wc -l) -ne 0 ]
 	sleep 5
 done
 
-kubectl create -f cluster/rook.yaml
-kubectl create -f cluster/rook-storageclass.yaml
-kubectl create -f cluster/rook-filesystem.yaml
+kubectl create -f cluster/rook/rook.yaml
+kubectl create -f cluster/rook/storageclass.yaml
+kubectl create -f cluster/rook/filesystem.yaml
 
 kubectl patch storageclass rook-ceph-block -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
@@ -28,6 +28,3 @@ kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.7.3/manifes
 kubectl create -f cluster/metallb.yaml
 
 kubectl create -f cluster/nginx.yaml
-
-kubectl create -f cluster/plex-namespace.yaml
-kubectl create -f cluster/samba.yaml

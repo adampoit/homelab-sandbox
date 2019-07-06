@@ -46,3 +46,4 @@ spec:
           options:
             fsName: plex-data
             clusterNamespace: rook-ceph
+            path: /

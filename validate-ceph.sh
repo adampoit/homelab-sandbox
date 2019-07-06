@@ -1,6 +1,6 @@
 export KUBECONFIG=$PWD/cluster/artifacts/admin.conf
 
-kubectl create -f cluster/rook-toolbox.yaml
+kubectl create -f cluster/rook/toolbox.yaml
 
 while [ $(kubectl -n rook-ceph get pod -l "app=rook-ceph-tools" | grep ContainerCreating | wc -l) -ne 0 ]; do
 	sleep 5
